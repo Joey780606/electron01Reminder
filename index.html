@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'">
     <title>Reminder App</title>
     <style>
         * {
@@ -120,17 +120,31 @@
         const reminderText = document.getElementById('reminderText');
         const output = document.getElementById('output');
 
-        submitBtn.addEventListener('click', () => {
+        submitBtn.addEventListener('click', async () => {
             const text = reminderText.value.trim();
 
             if (text) {
-                output.textContent = `Reminder saved: ${text}`;
-                output.classList.add('show');
+                try {
+                    // Save reminder to database
+                    const result = await window.electronAPI.saveReminder(text);
 
-                // Clear the textarea after a moment
-                setTimeout(() => {
-                    reminderText.value = '';
-                }, 500);
+                    if (result.success) {
+                        const timestamp = new Date(result.data.time * 1000);
+                        output.textContent = `Reminder saved successfully!\nID: ${result.data.id}\nTime: ${timestamp.toLocaleString()}`;
+                        output.classList.add('show');
+
+                        // Clear the textarea after a moment
+                        setTimeout(() => {
+                            reminderText.value = '';
+                        }, 500);
+                    } else {
+                        output.textContent = `Error: ${result.error}`;
+                        output.classList.add('show');
+                    }
+                } catch (error) {
+                    output.textContent = `Error saving reminder: ${error.message}`;
+                    output.classList.add('show');
+                }
             } else {
                 output.textContent = 'Please enter a reminder first!';
                 output.classList.add('show');
