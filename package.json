@@ -1,0 +1,16 @@
+{
+  "name": "electron-reminder",
+  "version": "1.0.0",
+  "description": "An Electron reminder application",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron .",
+    "dev": "electron ."
+  },
+  "keywords": ["electron", "reminder"],
+  "author": "",
+  "license": "MIT",
+  "devDependencies": {
+    "electron": "^28.0.0"
+  }
+}
