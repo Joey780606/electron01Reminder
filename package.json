@@ -5,7 +5,8 @@
   "main": "main.js",
   "scripts": {
     "start": "electron .",
-    "dev": "electron ."
+    "dev": "electron .",
+    "dist": "electron-builder"
   },
   "keywords": [
     "electron",
@@ -15,9 +16,40 @@
   "license": "MIT",
   "devDependencies": {
     "electron": "^28.0.0",
+    "electron-builder": "^26.0.12",
     "electron-rebuild": "^3.2.9"
   },
   "dependencies": {
     "sqlite3": "^5.1.7"
+  },
+  "build": {
+    "appId": "com.joeyyang.reminder",
+    "productName": "Reminder",
+    "copyright": "Copyright © 2025",
+    "files": [
+      "**/*",
+      "!**/*.ts",
+      "!*.code-workspace",
+      "!LICENSE.md",
+      "!package-lock.json",
+      "!src/",
+      "!.git/",
+      "!.vscode/"
+    ],
+    "win": {
+      "target": [
+        {
+          "target": "nsis",
+          "arch": [
+            "x64"
+          ]
+        }
+      ],
+      "icon": "icon.png"
+    },
+    "nsis": {
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true
+    }
   }
 }
